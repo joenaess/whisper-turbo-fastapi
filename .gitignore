@@ -3,3 +3,4 @@
 stuff.txt
 *.ipynb
 .dockerignore
+.venv
