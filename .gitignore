@@ -4,3 +4,5 @@ stuff.txt
 *.ipynb
 .dockerignore
 .venv
+uvicorn_main.py
+test.sh

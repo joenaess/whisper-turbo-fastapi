@@ -1,50 +1,37 @@
 import logging
 import tempfile
+import os
 from fastapi import FastAPI, File, UploadFile, HTTPException
-import torch
-from transformers import AutoModelForSpeechSeq2Seq, AutoProcessor, pipeline
+from model_loader import load_model
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
-device = "cuda:0" if torch.cuda.is_available() else "cpu"
-torch_dtype = torch.float16 if torch.cuda.is_available() else torch.float32
-
-model_id = "openai/whisper-large-v3-turbo"
-
-model = AutoModelForSpeechSeq2Seq.from_pretrained(
-    model_id, torch_dtype=torch_dtype, low_cpu_mem_usage=True, use_safetensors=True
-)
-model.to(device)
-
-processor = AutoProcessor.from_pretrained(model_id)
+# Load the model, processor, and pipeline
+model, processor, pipe = load_model() 
 
 app = FastAPI()
-
-
-pipe = pipeline(
-    "automatic-speech-recognition",
-    model=model,
-    tokenizer=processor.tokenizer,
-    feature_extractor=processor.feature_extractor,
-    torch_dtype=torch_dtype,
-    device=device,
-    return_timestamps=True
-)
 
 @app.post("/transcribe")
 async def transcribe_audio(file: UploadFile = File(...)):
     try:
         # Save the uploaded file temporarily
-        with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as temp_audio:
+        with tempfile.NamedTemporaryFile(suffix=".mp3", delete=False) as temp_audio:
             temp_audio_path = temp_audio.name
+        logger.debug(f"Saving file to: {temp_audio_path}")
+
+        with open(temp_audio_path, "wb") as f:  # Open the file in write binary mode
             f.write(file.file.read())
-            logger.info(f"Received audio file: {file.filename}")
 
         # Transcribe the audio file
-        text = pipe(temp_audio_path)["text"]
+        transcription = pipe(temp_audio_path) 
 
-        logger.info(f"Received audio file: {file.filename}")
+        # Check if transcription is valid
+        if not transcription or "text" not in transcription:
+            raise ValueError("Transcription result is invalid") 
+
+        text = transcription["text"]
+        logger.info(f"Transcription: {text}") 
         return {"text": text}
 
     except Exception as e:
@@ -53,5 +40,4 @@ async def transcribe_audio(file: UploadFile = File(...)):
     
     finally:
         # Ensure the temporary file is deleted
-        import os
         os.unlink(temp_audio_path) 
