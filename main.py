@@ -8,7 +8,7 @@ logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %
 logger = logging.getLogger(__name__)
 
 # Load the model, processor, and pipeline
-model, processor, pipe = load_model() 
+model, processor, pipe = load_model()
 
 app = FastAPI()
 
@@ -24,20 +24,20 @@ async def transcribe_audio(file: UploadFile = File(...)):
             f.write(file.file.read())
 
         # Transcribe the audio file
-        transcription = pipe(temp_audio_path) 
+        transcription = pipe(temp_audio_path)
 
         # Check if transcription is valid
         if not transcription or "text" not in transcription:
-            raise ValueError("Transcription result is invalid") 
+            raise ValueError("Transcription result is invalid")
 
         text = transcription["text"]
-        logger.info(f"Transcription: {text}") 
+        logger.info(f"Transcription: {text}")
         return {"text": text}
 
     except Exception as e:
         logger.exception(f"Error during transcription: {e}")
         raise HTTPException(status_code=500, detail="Transcription failed")
-    
+
     finally:
         # Ensure the temporary file is deleted
-        os.unlink(temp_audio_path) 
+        os.unlink(temp_audio_path)

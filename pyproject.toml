@@ -1,10 +1,12 @@
 [tool.ruff]
-line-length = 100  # Set the line length
+line-length = 100
+
+[tool.ruff.lint]  # Add this section
+ignore = [
+  "E501",  # Ignore "line too long" errors
+]
 select = [
   "E",  # Pycodestyle errors
   "F",  # Pyflakes errors
   "W",  # Pycodestyle warnings
-]
-ignore = [
-  "E501",  # Ignore "line too long" errors
 ]

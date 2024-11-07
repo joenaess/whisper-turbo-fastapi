@@ -17,9 +17,9 @@ def load_model(model_id="openai/whisper-large-v3-turbo"):
 
         # Download and load the model
         model = AutoModelForSpeechSeq2Seq.from_pretrained(
-            model_id, 
-            torch_dtype=torch_dtype, 
-            low_cpu_mem_usage=True, 
+            model_id,
+            torch_dtype=torch_dtype,
+            low_cpu_mem_usage=True,
             use_safetensors=True
         )
         model.to(device)
