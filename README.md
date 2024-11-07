@@ -10,3 +10,32 @@ Simply make sure you have docker installed.
 3. **Third:** ./test.sh
 
 If it works it should now return a transcription of the mp3.
+
+## Contributing
+
+We welcome contributions to this project! If you'd like to contribute, please follow these steps:
+
+1. **Fork the repository:** Click the "Fork" button in the top right corner of this page.
+
+2. **Create a new branch:** Create a new branch for your feature or bug fix:
+
+   ```bash
+   git checkout -b my-new-branch
+
+3. **Make your changes:** Make the necessary code changes and commit them with clear commit messages.
+
+4. **Push your branch:** Push your branch to your forked repository:
+
+   ```bash
+   git push origin my-new-branch
+
+5. **Create a pull request:**  Go to the original repository and click the "New pull request" button. Select your forked repository and branch.
+
+6. **Code review:** Your code will be reviewed by the maintainers. Be prepared to address any feedback or requested changes.
+
+7. **Merge:** Once your pull request is approved, it will be merged into the main branch.
+
+# Using ruff as a linter
+
+
+
