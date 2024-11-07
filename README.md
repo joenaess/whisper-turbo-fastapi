@@ -19,14 +19,12 @@ We welcome contributions to this project! If you'd like to contribute, please fo
 
 2. **Create a new branch:** Create a new branch for your feature or bug fix:
 
-   ```bash
    git checkout -b my-new-branch
 
 3. **Make your changes:** Make the necessary code changes and commit them with clear commit messages.
 
 4. **Push your branch:** Push your branch to your forked repository:
 
-   ```bash
    git push origin my-new-branch
 
 5. **Create a pull request:**  Go to the original repository and click the "New pull request" button. Select your forked repository and branch.
